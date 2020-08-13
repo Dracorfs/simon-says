@@ -1,135 +1,135 @@
-const celeste = document.getElementById('celeste')
-const violeta = document.getElementById('violeta')
-const naranja = document.getElementById('naranja')
-const verde = document.getElementById('verde')
-const btnEmpezar = document.getElementById('btnEmpezar')
-const ULTIMO_NIVEL = 10
+const lightblue = document.getElementById('lightblue')
+const purple = document.getElementById('purple')
+const orange = document.getElementById('orange')
+const green = document.getElementById('green')
+const btnStart = document.getElementById('btnStart')
+const LAST_LEVEL = 10
 
-class Juego {
+class Game {
     constructor() {
-        this.inicializar = this.inicializar.bind(this)
-        this.inicializar()
-        this.generarSecuencia()
-        setTimeout(this.siguienteNivel(), 500)
+        this.initialize = this.initialize.bind(this)
+        this.initialize()
+        this.generateSequence()
+        setTimeout(this.nextLevel(), 500)
     }
-    inicializar(){
-        this.siguienteNivel = this.siguienteNivel.bind(this)
-        this.elegirColor = this.elegirColor.bind(this)
-        this.toggleBtnEmpezar()
+    initialize(){
+        this.nextLevel = this.nextLevel.bind(this)
+        this.choiceColor = this.choiceColor.bind(this)
+        this.toggleBtnStart()
         
-        this.nivel = 1
-        this.colores = {
-            celeste,
-            violeta,
-            naranja,
-            verde,
+        this.level = 1
+        this.colors = {
+            lightblue,
+            purple,
+            orange,
+            green,
         }
     }
 
-    toggleBtnEmpezar(){
-        (btnEmpezar.classList.contains('hide'))
-            ? btnEmpezar.classList.remove('hide')
-            : btnEmpezar.classList.add('hide')
+    toggleBtnStart(){
+        (btnStart.classList.contains('hide'))
+            ? btnStart.classList.remove('hide')
+            : btnStart.classList.add('hide')
     }
 
-    generarSecuencia() {
-        this.secuencia = new Array(ULTIMO_NIVEL).fill(0).map(n => Math.floor(Math.random() * 4))
+    generateSequence() {
+        this.sequence = new Array(LAST_LEVEL).fill(0).map(n => Math.floor(Math.random() * 4))
     }
 
-    siguienteNivel() {
-        this.subnivel = 0
-        this.iluminarSecuencia()
-        this.agregarEventosClick()
+    nextLevel() {
+        this.sublevel = 0
+        this.lightUpSequence()
+        this.addClickEvents()
     }
 
-    transformarNumeroAColor(numero){
-        switch(numero){
+    transformNumToColor(number){
+        switch(number){
         case 0:
-            return 'celeste'
+            return 'lightblue'
         case 1:
-            return 'violeta'
+            return 'purple'
         case 2:
-            return 'naranja'
+            return 'orange'
         case 3:
-            return 'verde'
+            return 'green'
         }
     }
 
-    transformarColorANumero(color){
+    transformColorToNum(color){
         switch(color){
-        case 'celeste':
+        case 'lightblue':
             return 0
-        case 'violeta':
+        case 'purple':
             return 1
-        case 'naranja':
+        case 'orange':
             return 2
-        case 'verde':
+        case 'green':
             return 3
         }
     }
 
-    iluminarSecuencia() {
-        for (let i = 0; i < this.nivel; i++){
-        const color = this.transformarNumeroAColor(this.secuencia[i])
-        setTimeout(() => this.iluminarColor(color), 1000 * i)
+    lightUpSequence() {
+        for (let i = 0; i < this.level; i++){
+        const color = this.transformNumToColor(this.sequence[i])
+        setTimeout(() => this.lightUpColor(color), 1000 * i)
         }
     }
 
-    iluminarColor(color){
-        this.colores[color].classList.add('light')
-        setTimeout(() => this.apagarColor(color), 350)
+    lightUpColor(color){
+        this.colors[color].classList.add('light')
+        setTimeout(() => this.turnOffColor(color), 350)
     }
 
-    apagarColor(color){
-        this.colores[color].classList.remove('light')
+    turnOffColor(color){
+        this.colors[color].classList.remove('light')
     }
 
-    agregarEventosClick(){
-        this.colores.celeste.addEventListener('click', this.elegirColor)
-        this.colores.verde.addEventListener('click', this.elegirColor)
-        this.colores.violeta.addEventListener('click', this.elegirColor)
-        this.colores.naranja.addEventListener('click', this.elegirColor)
+    addClickEvents(){
+        this.colors.lightblue.addEventListener('click', this.choiceColor)
+        this.colors.green.addEventListener('click', this.choiceColor)
+        this.colors.purple.addEventListener('click', this.choiceColor)
+        this.colors.orange.addEventListener('click', this.choiceColor)
     }
 
-    eliminarEventosClick() {
-        this.colores.celeste.removeEventListener('click', this.elegirColor)
-        this.colores.verde.removeEventListener('click', this.elegirColor)
-        this.colores.violeta.removeEventListener('click', this.elegirColor)
-        this.colores.naranja.removeEventListener('click', this.elegirColor)
+    deleteClickEvents() {
+        this.colors.lightblue.removeEventListener('click', this.choiceColor)
+        this.colors.green.removeEventListener('click', this.choiceColor)
+        this.colors.purple.removeEventListener('click', this.choiceColor)
+        this.colors.orange.removeEventListener('click', this.choiceColor)
     }
 
-    elegirColor(ev){
-        const nombreColor = ev.target.dataset.color
-        const numeroColor = this.transformarColorANumero(nombreColor)
-        this.iluminarColor(nombreColor)
-        if (numeroColor === this.secuencia[this.subnivel]){
-        this.subnivel++
-        if (this.subnivel === this.nivel){
-            this.nivel++
-            this.eliminarEventosClick()
-            if (this.nivel === (ULTIMO_NIVEL + 1)){
-            this.ganoElJuego()
+    choiceColor(ev){
+        const colorName = ev.target.dataset.color
+        const colorNumber = this.transformColorToNum(colorName)
+        this.lightUpColor(colorName)
+        if (colorNumber === this.sequence[this.sublevel]){
+        this.sublevel++
+        if (this.sublevel === this.level){
+            this.level++
+            this.deleteClickEvents()
+            if (this.level === (LAST_LEVEL + 1)){
+            this.winTheGame()
             } else {
-            setTimeout(this.siguienteNivel, 1500)
+            setTimeout(this.nextLevel, 1500)
             }
         }
         } else {
-        this.perdioElJuego()
+        this.gameOver()
         }
     }
-    ganoElJuego(){
+    winTheGame(){
         swal('Platzi', 'Felicitaciones, ganaste el juego!', 'success')
-        .then(this.inicializar)
+        .then(this.initialize)
     }
-    perdioElJuego(){
+    gameOver(){
         swal('Platzi', 'Lo lamentamos, perdiste :c', 'error')
         .then(() => {
-            this.eliminarEventosClick()
-            this.inicializar()
+            this.deleteClickEvents()
+            this.initialize()
         })
     }
 }
 
-function empezarJuego(){
-    window.juego = new Juego()
+function startGame(){
+    window.game = new Game()
 }
